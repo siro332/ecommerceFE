@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink , useNavigate} from "react-router-dom";
 import axios from "axios";
 import { PATH } from "../../constants/API";
 import { CartContext } from "../helpers/context/cart-context";
@@ -12,6 +12,8 @@ function Checkout() {
     const cartContext = useContext(CartContext)
     const authContext = useContext(AuthContext)
     const [orderSubmited,setOrderSubmited] = useState(false); 
+    
+    const navigate = useNavigate();
     const [orderForm,setOrderForm] = useState({
         name: "",
         address: "",
@@ -94,7 +96,7 @@ function Checkout() {
             async function getUserInfo() {
                 try {
                     if (authContext.isAuthenticated) {
-                        const token = 'bearer ' + localStorage.getItem("token")
+                        const token = 'Bearer ' + localStorage.getItem("token")
                         console.log(token)
                         const response = await axios.get(PATH.API_ROOT_URL + PATH.API_ORDER + "/cart/user", {
                             headers: {
@@ -124,7 +126,7 @@ function Checkout() {
                             units: userCart.cartItemDtos[deletingItem].units
                         }, {
                             headers: {
-                                'Authorization': 'bearer ' + localStorage.getItem("token")
+                                'Authorization': 'Bearer ' + localStorage.getItem("token")
                             }
                         });
                         const temp = userCart;
@@ -159,15 +161,31 @@ function Checkout() {
         isPaid:orderForm.paymentMethod!=="cod"?true:false
         }, {
             headers: {
-                'Authorization': 'bearer ' + localStorage.getItem("token")
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
             }
         });
         setOrderSubmited(true)
-        (cartContext.toggleCartReload)()
+        alert("Đặt hàng thành công")
+        
         } catch (error) {
           
         }
+        
     }
+    useEffect(() => {
+      async function redirect() {
+          try {
+              if (orderSubmited) {
+                (cartContext.toggleCartReload)()
+              navigate("/")
+              }
+          } catch (error) {
+              console.error(error.message)
+          }
+      }
+      redirect();
+  }
+  , [orderSubmited])
     return (
       userCart?
         <div>
@@ -192,7 +210,7 @@ function Checkout() {
                 <div className="container">
                   <div className="checkout-discount">
                   </div>
-                  <form onSubmit={() => submitForm()}>
+                  <form >
                     <div className="row">
                       <div className="col-lg-9">
                         <h2 className="checkout-title">Thông tin đơn hàng</h2>{/* End .checkout-title */}
@@ -287,7 +305,7 @@ function Checkout() {
                             
                             
                           </div>{/* End .accordion */}
-                          <button type="submit" className="btn btn-outline-primary-2 btn-order btn-block">
+                          <button type="button" onClick={submitForm} className="btn btn-outline-primary-2 btn-order btn-block">
                             <span className="btn-text">Đặt hàng</span>
                             <span className="btn-hover-text">Đặt hàng</span>
                           </button>

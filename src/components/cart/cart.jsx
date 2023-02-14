@@ -18,7 +18,7 @@ function Cart() {
       async function getUserInfo() {
         try {
           if (authContext.isAuthenticated) {
-            const token = 'bearer ' + localStorage.getItem("token")
+            const token = 'Bearer ' + localStorage.getItem("token")
             console.log(token)
             const response = await axios.get(PATH.API_ROOT_URL + PATH.API_ORDER + "/cart/user", {
               headers: {
@@ -58,7 +58,7 @@ function Cart() {
               units: userCart.cartItemDtos[deletingItem].units
             }, {
               headers: {
-                'Authorization': 'bearer ' + localStorage.getItem("token")
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
               }
             });
             const temp = userCart;
@@ -92,7 +92,7 @@ function Cart() {
       cartForm
     , {
       headers: {
-        'Authorization': 'bearer ' + localStorage.getItem("token")
+        'Authorization': 'Bearer ' + localStorage.getItem("token")
       }
     });
     (cartContext.toggleCartReload)()

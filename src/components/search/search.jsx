@@ -6,6 +6,7 @@ import { PATH } from "../../constants/API"
 import Header from "../common/header";
 import CategoryProduct from "../home/components/categoryProduct";
 import { SearchContext } from "../helpers/context/search-context";
+import LoginForm from "../common/login-form";
 function Search({ categories }) {
     const searchContext = useContext(SearchContext);
     const [page, setPage] = useState(1);
@@ -551,6 +552,7 @@ function Search({ categories }) {
                     </div>{/* End .social-icons */}
                 </div>{/* End .mobile-menu-wrapper */}
             </div>{/* End .mobile-menu-container */}
+            <LoginForm></LoginForm>
         </div>
     );
 }

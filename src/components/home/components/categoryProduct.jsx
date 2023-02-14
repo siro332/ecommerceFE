@@ -113,7 +113,7 @@ function CategoryProduct({ category }) {
                                     </div>{/* End .product-action-vertical */}
                                     <div className="product-action">
                                     <NavLink className="btn-product btn-cart" title="Add to cart" to={"/product/" + item.code}>
-                                    <span>add to cart</span>
+                                    <span>Thêm vào giỏ</span>
                                         </NavLink>
                                     </div>{/* End .product-action */}
                                 </figure>{/* End .product-media */}

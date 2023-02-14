@@ -9,7 +9,7 @@ function Header({ categories }) {
     const [userCart, setUserCart] = useState(undefined);
     const [deletingItem, setDeletingItem] = useState(-1);
     const [searchParam, setSearchParam] = useState("");
-    const cartContext = useContext(CartContext);   
+    const cartContext = useContext(CartContext);
     const authContext = useContext(AuthContext);
     const searchContext = useContext(SearchContext);
     const location = useLocation();
@@ -19,7 +19,7 @@ function Header({ categories }) {
             async function getUserInfo() {
                 try {
                     if (authContext.isAuthenticated) {
-                        const token = 'bearer ' + localStorage.getItem("token")
+                        const token = 'Bearer ' + localStorage.getItem("token")
                         const response = await axios.get(PATH.API_ROOT_URL + PATH.API_ORDER + "/cart/user", {
                             headers: {
                                 'Authorization': token
@@ -46,7 +46,7 @@ function Header({ categories }) {
                             units: userCart.cartItemDtos[deletingItem].units
                         }, {
                             headers: {
-                                'Authorization': 'bearer ' + localStorage.getItem("token")
+                                'Authorization': 'Bearer ' + localStorage.getItem("token")
                             }
                         });
                         const temp = userCart;
@@ -72,6 +72,7 @@ function Header({ categories }) {
             }
             setSearch();
         }, [searchParam]);
+        
     const handleSearch = () => {
         const path = location.pathname.split("/")[1];
         (searchContext.search)(searchParam)
@@ -90,26 +91,26 @@ function Header({ categories }) {
                         <a href="tel:#"><i className="icon-phone" />Hỗ trợ: +84 0334 998 977 </a>
                     </div>{/* End .header-left */}
                     <div className="header-right">
-                    <ul className="top-menu">
-                            <li>                              
+                        <ul className="top-menu">
+                            <li>
                                 <ul>
                                     <li className="login">
-                                        {authContext.isAuthenticated? 
+                                        {authContext.isAuthenticated ?
                                             <div>
                                                 <span>
                                                     Xin chào <NavLink to={"/dashboard"}>{localStorage.getItem("lastname") + " " + localStorage.getItem("firstname")}! </NavLink>
                                                 </span>
-                                                <a href="#" onClick={authContext.logout}> Đăng xuất</a>               
-                                        </div>
-                                        
-                                        : 
-                                        <a href="#signin-modal" data-toggle="modal">Đăng nhập / Đăng ký</a>}
+                                                <a href="#" onClick={authContext.logout}> Đăng xuất</a>
+                                            </div>
+
+                                            :
+                                            <a href="#signin-modal" data-toggle="modal">Đăng nhập / Đăng ký</a>}
                                     </li>
                                 </ul>
                             </li>
                         </ul>
                     </div>
-                    
+
                 </div>{/* End .container */}
             </div>{/* End .header-top */}
             <div className="header-middle">

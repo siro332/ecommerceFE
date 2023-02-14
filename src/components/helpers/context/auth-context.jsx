@@ -18,6 +18,7 @@ function AuthContextProvider({ children }) {
     localStorage.removeItem("email")
     localStorage.removeItem("firstname")
     localStorage.removeItem("lastname")
+    window.location.reload(false);
   }
 
   const isTokenExpired = async () => {

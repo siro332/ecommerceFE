@@ -6,6 +6,7 @@ import { PATH } from "../../constants/API"
 import Header from "../common/header";
 import CategoryProduct from "../home/components/categoryProduct";
 import { SearchContext } from "../helpers/context/search-context";
+import LoginForm from "../common/login-form";
 function Category() {
     const categoryCode = useParams();
     const searchContext = useContext(SearchContext);
@@ -155,7 +156,7 @@ function Category() {
                                                     <select name="sortby" id="sortby" defaultValue={"created_at DESC"} onChange={handleSortByChange} className="form-control">
                                                         <option value="created_at DESC">Mới nhất</option>
                                                         <option value="created_at ASC">Cũ nhất</option>
-                                                        <option value="sales DESC">Bán chạy</option>
+                                                        <option value="totalUnitSold DESC">Bán chạy</option>
                                                         <option value="price ASC">Giá tăng dần</option>
                                                         <option value="price DESC">Giá giảm dần</option>
                                                     </select>
@@ -178,7 +179,9 @@ function Category() {
                                                                 <a href="popup/quickView.html" className="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
                                                             </div>{/* End .product-action-vertical */}
                                                             <div className="product-action">
-                                                                <a href="#" className="btn-product btn-cart" title="Add to cart"><span>add to cart</span></a>
+                                                            <NavLink className="btn-product btn-cart" title="Add to cart" to={"/product/" + item.code}>
+                                    <span>Thêm vào giỏ</span>
+                                        </NavLink>
                                                             </div>{/* End .product-action */}
                                                         </figure>{/* End .product-media */}
                                                         <div className="product-body">
@@ -592,6 +595,7 @@ function Category() {
                     </div>{/* End .social-icons */}
                 </div>{/* End .mobile-menu-wrapper */}
             </div>{/* End .mobile-menu-container */}
+            <LoginForm></LoginForm>
         </div>
     );
 }

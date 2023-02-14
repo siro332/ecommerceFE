@@ -6,6 +6,7 @@ import Header from "../common/header";
 import CategoryProduct from "../home/components/categoryProduct";
 import { SearchContext } from "../helpers/context/search-context";
 import { CartContext } from "../helpers/context/cart-context";
+import { AuthContext } from "../helpers/context/auth-context";
 function Dashboard() {
     const [orders, setOrders] = useState([]);
     const [userAddressForm,setUserAddressForm] = useState({
@@ -17,6 +18,7 @@ function Dashboard() {
         phoneNumber:"",
         email:""
     })
+    const authContext = useContext(AuthContext);
     const handleNameInputChange = (event) => {
         event.persist();
         setUserAddressForm((userAddressForm) => ({
@@ -79,7 +81,7 @@ function Dashboard() {
         email:userAddressForm.email
         }, {
             headers: {
-                'Authorization': 'bearer ' + localStorage.getItem("token")
+                'Authorization': 'Bearer ' + localStorage.getItem("token")
             }
         });
         } catch (error) {
@@ -91,7 +93,7 @@ function Dashboard() {
             // async function getUserInfo() {
             //     try {
             //         if (keycloak.authenticated) {
-            //             const token = 'bearer ' + keycloak.token
+            //             const token = 'Bearer ' + keycloak.token
             //             const response = await axios.get(PATH.API_ROOT_URL + PATH.API_USER + "/info/", {
             //                 headers: {
             //                     'Authorization': token
@@ -121,35 +123,50 @@ function Dashboard() {
         () => {
             async function getUserOrder() {
                 try {
-                    // if (keycloak.authenticated) {
-                    //     const token = 'bearer ' + keycloak.token
-                    //     const response = await axios.get(PATH.API_ROOT_URL + PATH.API_ORDER + "/order/user", {
-                    //         headers: {
-                    //             'Authorization': token
-                    //         }
-                    //     });
-                    //     console.log(response.data)
-                    //     setOrders(response.data)
-                    //     // const tempcart = [];
-                    //     // response.data.cartItemDtos.forEach(item => {
-                    //     //   tempcart.push({
-                    //     //     productCode: item.productDto.code,
-                    //     //     productInventory: item.inventoryItem.sku,
-                    //     //     units: item.units
-                    //     //   })
-                    //     // });
-                    //     // setCartForm(tempcart)
+                    if (authContext.isAuthenticated) {
+                        const token = 'Bearer ' + localStorage.getItem("token")
+                        const response = await axios.get(PATH.API_ROOT_URL + PATH.API_ORDER + "/order/user", {
+                            headers: {
+                                'Authorization': token
+                            }
+                        });
+                        console.log(response.data)
+                        setOrders(response.data)
+                        // const tempcart = [];
+                        // response.data.cartItemDtos.forEach(item => {
+                        //   tempcart.push({
+                        //     productCode: item.productDto.code,
+                        //     productInventory: item.inventoryItem.sku,
+                        //     units: item.units
+                        //   })
+                        // });
+                        // setCartForm(tempcart)
 
-                    //     // console.log(tempcart)
-                    // }
+                        // console.log(tempcart)
+                    }
                 } catch (error) {
                     console.error(error.message)
                 }
             }
             getUserOrder()
         }
-        , [])
+        , [authContext.isAuthenticated])
 
+
+    const handleCancel = async (code) =>{
+        try {
+            await axios.post(PATH.API_ROOT_URL + PATH.API_ORDER + "/order/change-status/"+ code, {}, {
+              params: {status: "canceled"},  
+              headers: {
+                  'Authorization': 'Bearer ' + localStorage.getItem("token")
+              }
+          });
+          
+          alert("Huỷ đơn hàng thành công")
+          } catch (error) {
+            console.log(error)
+          }
+    }    
     return (
 
         <div className="page-wrapper">
@@ -230,7 +247,7 @@ function Dashboard() {
                                                                             </tr>
                                                                         </thead>
                                                                         <tbody>
-                                                                            {item.cartItem.map((product, index) => (
+                                                                            {item?.cartItems?.map((product, index) => (
                                                                                 <tr>
                                                                                     <td className="product-col">
                                                                                         <div className="product">
@@ -253,7 +270,7 @@ function Dashboard() {
                                                                         </tbody>
                                                                     </table>
                                                                     <div className="cart-bottom">
-                                                                    {item.status === "Đã giao"?<div></div>:<button className="btn btn-outline-dark-2"><span>Huỷ đơn hàng</span></button>}
+                                                                    {item.status === "delivered"?<div></div>:<button type="button" className="btn btn-outline-dark-2" onClick={() => handleCancel(item.code)}><span>Huỷ đơn hàng</span></button>}
                 </div>
                                                                 </div>{/* End .card-body */}
                                                             </div>{/* End .collapse */}

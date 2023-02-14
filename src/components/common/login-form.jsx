@@ -15,7 +15,9 @@ function LoginForm(){
         try {
           const response = await axios.post(  PATH.API_ROOT_URL + PATH.API_AUTH_LOGIN + "/authenticate", {
             email: username,
-            password: password
+            password: password,
+            firstname: username,
+            lastname: ""
           })
           const data = response.data;
           console.log(data) 
@@ -33,12 +35,14 @@ function LoginForm(){
         e.preventDefault();
         try {
           const response = await axios.post(  PATH.API_ROOT_URL + PATH.API_AUTH_LOGIN + "/register", {
-            email: username,
-            password: password
+            email: usernameRegister,
+            password: passwordRegister,
+            firstname: usernameRegister,
+            lastname: ""
           })
           const data = response.data;
           if (data != null) {
-            (authContext.login)()
+            (authContext.login)(data)
             window.location.reload(false);
           }
         } catch (error) {
@@ -57,17 +61,17 @@ function LoginForm(){
                         <div className="form-tab">
                             <ul className="nav nav-pills nav-fill nav-border-anim" role="tablist">
                                 <li className="nav-item">
-                                    <a className="nav-link active" id="signin-tab" data-toggle="tab" href="#signin" role="tab" aria-controls="signin" aria-selected="true">Sign In</a>
+                                    <a className="nav-link active" id="signin-tab" data-toggle="tab" href="#signin" role="tab" aria-controls="signin" aria-selected="true">Đăng nhập</a>
                                 </li>
                                 <li className="nav-item">
-                                    <a className="nav-link" id="register-tab" data-toggle="tab" href="#register" role="tab" aria-controls="register" aria-selected="false">Register</a>
+                                    <a className="nav-link" id="register-tab" data-toggle="tab" href="#register" role="tab" aria-controls="register" aria-selected="false">Đăng ký</a>
                                 </li>
                             </ul>
                             <div className="tab-content" id="tab-content-5">
                                 <div className="tab-pane fade show active" id="signin" role="tabpanel" aria-labelledby="signin-tab">
                                     <form onSubmit={handleSubmitLogin}>
                                         <div className="form-group">
-                                            <label htmlFor="singin-email">Tên tài khoản hoặc email *</label>
+                                            <label htmlFor="singin-email">Email *</label>
                                             <input type="text" className="form-control" id="singin-email" name="singin-email" required 
                                                 value={username}
                                                 onChange={(e) => setUsername(e.target.value)}
@@ -94,14 +98,14 @@ function LoginForm(){
                                             <label htmlFor="register-email">Nhập email của bạn *</label>
                                             <input type="email" className="form-control" id="register-email" name="register-email" required 
                                                 value={usernameRegister}
-                                                onChange={(e) => setUsernameRegister(e.target.value)}
+                                                onChange={(e) => {setUsernameRegister(e.target.value);console.log(e.target.value)}}
                                             />
                                         </div>{/* End .form-group */}
                                         <div className="form-group">
                                             <label htmlFor="register-password">Nhập mật khẩu *</label>
                                             <input type="password" className="form-control" id="register-password" name="register-password" required 
                                                 value={passwordRegister}
-                                                onChange={(e) => setPasswordRegister(e.target.value)}
+                                                onChange={(e) => {setPasswordRegister(e.target.value);console.log(e.target.value)}}
                                             />
                                         </div>{/* End .form-group */}
                                         <div className="form-footer">
@@ -115,23 +119,7 @@ function LoginForm(){
                                             </div>{/* End .custom-checkbox */}
                                         </div>{/* End .form-footer */}
                                     </form>
-                                    <div className="form-choice">
-                                        <p className="text-center">or sign in with</p>
-                                        <div className="row">
-                                            <div className="col-sm-6">
-                                                <a href="#" className="btn btn-login btn-g">
-                                                    <i className="icon-google" />
-                                                    Login With Google
-                                                </a>
-                                            </div>{/* End .col-6 */}
-                                            <div className="col-sm-6">
-                                                <a href="#" className="btn btn-login  btn-f">
-                                                    <i className="icon-facebook-f" />
-                                                    Login With Facebook
-                                                </a>
-                                            </div>{/* End .col-6 */}
-                                        </div>{/* End .row */}
-                                    </div>{/* End .form-choice */}
+                                    
                                 </div>{/* .End .tab-pane */}
                             </div>{/* End .tab-content */}
                         </div>{/* End .form-tab */}
