@@ -45,7 +45,7 @@ function Category() {
                 // You can await here
                 setCategoryLoading(true);
                 try {
-                    const response = await axios.get(PATH.API_ROOT_URL + PATH.API_CATALOG + "/categories/" + categoryCode.id);
+                    const response = await axios.get(PATH.API_ROOT_URL + PATH.API_CATALOG + "/categories/category/" + categoryCode.id);
                     setCategory(response.data);
                 } catch (error) {
                     console.error(error.message);

@@ -12,6 +12,7 @@
     "react-router-dom": "^6.2.2",
     "react-scripts": "5.0.0",
     "react-simplert": "^0.0.2",
+    "react-stripe-checkout": "^2.6.3",
     "web-vitals": "^2.1.4"
   },
   "peerDependencies": {

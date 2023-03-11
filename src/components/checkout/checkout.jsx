@@ -5,6 +5,7 @@ import { PATH } from "../../constants/API";
 import { CartContext } from "../helpers/context/cart-context";
 import { Simplert } from "react-simplert";
 import { AuthContext } from "../helpers/context/auth-context";
+import StripeButton from "../helpers/stripe-button";
 function Checkout() {
     
     const [userCart, setUserCart] = useState(undefined);
@@ -301,14 +302,32 @@ function Checkout() {
                                 </div>{/* End .card-body */}
                               </div>{/* End .collapse */}
                             </div>{/* End .card */}
+                            <div className="card">
+                              <div className="card-header" id="heading-3">
+                                <h2 className="card-title">
+                                  <a className="collapsed" role="button" data-toggle="collapse" href="#collapse-3" aria-expanded="false" aria-controls="collapse-3" onClick={(e)=>handlePaymentInputChange(e,"paid")}>
+                                    Thanh toán trưc tiếp
+                                  </a>
+                                </h2>
+                              </div>{/* End .card-header */}
+                              <div id="collapse-3" className="collapse" aria-labelledby="heading-3" data-parent="#accordion-payment">
+                                <div className="card-body">
+                                  Thanh toán trực tiếp đơn hàng
+                                </div>{/* End .card-body */}
+                              </div>{/* End .collapse */}
+                            </div>{/* End .card */}
                             
                             
                             
                           </div>{/* End .accordion */}
+                          {orderForm.paymentMethod === "paid"? 
+                          <StripeButton price={userCart.totals} submitFunction={submitForm}/> :
                           <button type="button" onClick={submitForm} className="btn btn-outline-primary-2 btn-order btn-block">
                             <span className="btn-text">Đặt hàng</span>
                             <span className="btn-hover-text">Đặt hàng</span>
                           </button>
+                        }
+                          
                         </div>{/* End .summary */}
                       </aside>{/* End .col-lg-3 */}
                     </div>{/* End .row */}

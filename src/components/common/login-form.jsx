@@ -6,9 +6,11 @@ import { AuthContext } from "../helpers/context/auth-context";
 function LoginForm(){
     const authContext = useContext(AuthContext);
     const [username, setUsername] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [password, setPassword] = useState("");
     const [usernameRegister, setUsernameRegister] = useState("");
     const [passwordRegister, setPasswordRegister] = useState("");
+    const [error, setError] = useState("");
     const navigate = useNavigate();
     const handleSubmitLogin = async (e) => {
         e.preventDefault();
@@ -28,12 +30,18 @@ function LoginForm(){
           }
         } catch (error) {
           console.error(error);
+          setError("Sai tên tài khoản hoặc mật khẩu")
         }
       };
     
       const handleSubmitRegister = async (e) => {
         e.preventDefault();
         try {
+        if (passwordRegister !== confirmPassword) {
+            setError("Mật khẩu không trùng khớp.")
+            console.log(error)
+            return;
+        }
           const response = await axios.post(  PATH.API_ROOT_URL + PATH.API_AUTH_LOGIN + "/register", {
             email: usernameRegister,
             password: passwordRegister,
@@ -84,6 +92,7 @@ function LoginForm(){
                                                 onChange={(e) => setPassword(e.target.value)}
                                             />
                                         </div>{/* End .form-group */}
+                                        {error!==""?<div>{error}</div>:<div></div>}
                                         <div className="form-footer">
                                             <button type="submit" className="btn btn-outline-primary-2">
                                                 <span>Đăng nhập</span>
@@ -108,6 +117,14 @@ function LoginForm(){
                                                 onChange={(e) => {setPasswordRegister(e.target.value);console.log(e.target.value)}}
                                             />
                                         </div>{/* End .form-group */}
+                                        <div className="form-group">
+                                            <label htmlFor="register-password">Nhập lại mật khẩu *</label>
+                                            <input type="password" className="form-control" id="register-password" name="register-password" required 
+                                                value={confirmPassword}
+                                                onChange={(e) => {setConfirmPassword(e.target.value);console.log(e.target.value)}}
+                                            />
+                                        </div>{/* End .form-group */}
+                                        {error!==""?<div>{error}</div>:<div></div>}
                                         <div className="form-footer">
                                             <button type="submit" className="btn btn-outline-primary-2">
                                                 <span>Đăng ký</span>
@@ -119,7 +136,6 @@ function LoginForm(){
                                             </div>{/* End .custom-checkbox */}
                                         </div>{/* End .form-footer */}
                                     </form>
-                                    
                                 </div>{/* .End .tab-pane */}
                             </div>{/* End .tab-content */}
                         </div>{/* End .form-tab */}
